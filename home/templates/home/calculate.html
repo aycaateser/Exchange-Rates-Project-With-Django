@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
+<!--    <div class="container">-->
+<!--        <a class="navbar-brand" href="http://127.0.0.1:8000/">Currency App</a>-->
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"-->
+<!--                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--        <div class="collapse navbar-collapse" id="navbarSupportedContent">-->
+<!--            <ul class="navbar-nav me-auto mb-2 mb-lg-0">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/">Home</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="http://127.0.0.1:8000/currencyconversion/">Calculation</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--&lt;!&ndash;                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <button class="submit" type="submit">Search</button>&ndash;&gt;-->
+<!--            <div class="container-md p-5">-->
+
+<!--                <form method="post">-->
+<!--                    {% csrf_token %}-->
+<!--                    <input type="text" name="currencyAmount" placeholder="Amount">-->
+<!--                    <select name="currencyName" class="form-control" placeholder="Select the currency of the amount">-->
+<!--                        <option selected disabled=true></option>-->
+<!--                        {% for d in currency_select %}-->
+<!--                        <option> {{d.currency_name}}</option>-->
+<!--                        {% endfor %}-->
+<!--                    </select>-->
+
+
+<!--                    <br>-->
+<!--                    <button type="submit" id="123" class="btn btn-primary">Submit</button>-->
+<!--                </form>-->
+<!--                &lt;!&ndash;                <div class="input-group">&ndash;&gt;-->
+<!--                &lt;!&ndash;                    <div class="form-outline">&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <form action="{% url 'search' %}" class="d-flex" method="GET">&ndash;&gt;-->
+<!--                &lt;!&ndash;                            <input type="text" class="form-control" name="q" placeholder="Search"/>&ndash;&gt;-->
+<!--                &lt;!&ndash;                            <button type="submit" class="btn btn-primary">Search</button>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        </form>&ndash;&gt;-->
+<!--                &lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
+<!--            &lt;!&ndash;      </form>&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--<form method="post">-->
+<!--    {% csrf_token %}-->
+<!--    Amount:<input type="text" name="currencyAmount">-->
+<!--    <p>Select the currency of the amount</p>-->
+<!--    <select name="currencyName" class="form-control">-->
+<!--        <option selected disabled=true></option>-->
+<!--        {% for d in currency_select %}-->
+<!--            <option> {{d.currency_name}}</option>-->
+<!--        {% endfor %}-->
+<!--    </select>-->
+<!--    <br>-->
+<!--    <button type="submit" id="123" class="btn btn-primary">Submit</button>-->
+<!--</form>-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Currency App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Calculation</a>
+                </li>
+
+
+            </ul>
+             <form method="post">
+                        {% csrf_token %}
+                            <input class="form-control me-2" type="text" name="currencyAmount" placeholder="Amount">
+                            <select name="currencyName" class="p-1 m-1 me-2"
+                                    placeholder="Select the currency of the amount">
+                                <option selected disabled=true></option>
+                                {% for d in currency_select %}-->
+                                <option> {{d.currency_name}}</option>
+                                {% endfor %}-->
+                            </select>
+                            <button type="submit" id="123" class="btn btn-outline-success">Submit</button>
+                    </form>
+        </div>
+    </div>
+</nav>
+
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Converted Currency Name</th>
+        <th scope="col">Converted Currency Amount</th>
+        <th scope="col">Currency Name</th>
+        <th scope="col">Currency Buying</th>
+        <th scope="col">Currency Selling</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for d in currency_list %}
+    <tr>
+        <th scope="row"></th>
+        <td> {{ d.converted_currency_name}}</td>
+        <td> {{ d.converted_currency_amount}}</td>
+        <td> {{ d.currency_name}}</td>
+        <td> {{ d.currency_buying}}</td>
+        <td> {{ d.currency_selling}}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>
