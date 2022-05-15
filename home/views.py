@@ -38,7 +38,14 @@ def index(request):
                                                                                              'currency_buying',
                                                                                              'currency_selling',
                                                                                              'currency_rate_date')
-    print("asdasd", currency_list[0]["currency_buying"])
+    # [{'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}, {}]
+    curreny_name_list = Currency.objects.values_list('currency_name').distinct()
+    currency_diff_rate_list = curreny_diff_rate_calculation(curreny_name_list)
+    for currency in currency_list:
+        index_of_currency = list(currency_list).index(currency)
+        # {'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}
+        currency['currency_diff_rate'] = currency_diff_rate_list[index_of_currency]  # yeni dict fieldı
+    # CURRENY_LİST İÇERİSİNDE OLAN VERİLİRİN ÖNCEKİ GÜNLE KARŞILAŞTIRARAK BİR YENİ FİELD EKLEMEK HEPSİNE
     currency_dict = {
         'currencies': currency_list
     }
@@ -115,8 +122,24 @@ def graph(request):
         data[2] = float(data[2])
         graph_list.append(data)
     print(graph_list)
-
     return render(request, "home/graph.html", context={'graph_list': graph_list})
+
+
+def curreny_diff_rate_calculation(curreny_name_list):
+    curreny_diff_rate_list = []
+    for currency in curreny_name_list:
+        currency_buying_list = Currency.objects.filter(currency_name=currency[0]).values_list('currency_buying')
+        if len(currency_buying_list) > 1:
+            currency_buying_list = currency_buying_list[:2]
+            result = float(currency_buying_list[1][0]) - float(currency_buying_list[0][0])
+            result = (result / float(currency_buying_list[1][0])) * 100
+            curreny_diff_rate_list.append(str(round(result, 2)) + '%')
+        else:
+            curreny_diff_rate_list.append("-")
+
+    print(curreny_diff_rate_list)
+
+    return curreny_diff_rate_list
 
 # def search(request):
 #     if 'CurrencyName' in request.GET:
