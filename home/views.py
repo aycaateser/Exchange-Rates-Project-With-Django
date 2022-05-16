@@ -41,6 +41,7 @@ def index(request):
     # [{'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}, {}]
     curreny_name_list = Currency.objects.values_list('currency_name').distinct()
     currency_diff_rate_list = curreny_diff_rate_calculation(curreny_name_list)
+    #fark matchlemek
     for currency in currency_list:
         index_of_currency = list(currency_list).index(currency)
         # {'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}
@@ -67,15 +68,36 @@ def search_bar(request):
                                                                                            'currency_buying',
                                                                                            'currency_selling',
                                                                                            'currency_rate_date').filter(
-                currency_rate_date=datetime.date.today())
+                currency_rate_date=datetime.date.today()) #sadece bugunun verilerini getir
+
+
         else:
             print("No information to show")
             currency_query = Currency.objects.values('currency_name', 'currency_buying', 'currency_selling',
                                                      'currency_rate_date')
             print("buradayım")
             print(type(currency_query))
-    return render(request, "home/index.html", {'currencies': currency_query})
 
+
+  # [{'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}, {}]
+    currency_list = Currency.objects.filter(currency_rate_date=datetime.date.today()).values('currency_name',
+                                                                                             'currency_buying',
+                                                                                             'currency_selling',
+                                                                                             'currency_rate_date')
+    # [{'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}, {}]
+    curreny_name_list = Currency.objects.values_list('currency_name').distinct()
+    currency_diff_rate_list = curreny_diff_rate_calculation(curreny_name_list)
+    # fark matchlemek
+    for currency in currency_query:
+        index_of_currency_query = list(currency_list).index(currency)
+        # {'curreny_name': 'US DOLLAR, 'curreny_buying': decimal(), 'curreny_selling': decimal()}
+        currency['currency_diff_rate'] = currency_diff_rate_list[index_of_currency_query]  # yeni dict fieldı
+    # CURRENY_LİST İÇERİSİNDE OLAN VERİLERİ ÖNCEKİ GÜNLE KARŞILAŞTIRARAK HEPSİNE YENİ BİR FİELD EKLER
+    currency_dict = {
+        'currencies': currency_list
+    }
+
+    return render(request, "home/index.html",{'currencies': currency_query})
 
 @csrf_exempt
 def conversion(request):
@@ -140,45 +162,3 @@ def curreny_diff_rate_calculation(curreny_name_list):
     print(curreny_diff_rate_list)
 
     return curreny_diff_rate_list
-
-# def search(request):
-#     if 'CurrencyName' in request.GET:
-#         CurrencyName=request.GET['CurrencyName']
-#         data=Currency.objects.filter(first_name__icontains=CurrencyName)
-#     else:
-#         data=Currency.objects.all()
-#     context={
-#         'data':data
-#     }
-#     return render(request, 'home/index.html')
-
-# sorgu = request.GET.get('sorgu')
-# search_name = Currency.objects.order_by('-currency_name')
-# if sorgu:
-#     search_name.filter(
-#         Q(currency_name__icontains=sorgu)).distinct()
-# if 'q' in request.get:
-#     q=request.GET['q']
-#     first_q=Q(Q(currency_name__icontains=q))
-#     currency=Currency.objects.filter(first_q)
-#     print("shdcjf")
-# else:
-#     currency=Currency.objects.all()
-#
-#
-#     {
-#       'currency': currency
-#     }
-# return render(request,'home/index.html', currency)
-# import xmldict
-# import json
-# url="https://www.tcmb.gov.tr/kurlar/today.xml"
-# r=requests.get(url)
-# xml=r.text
-# soup=BeautifulSoup(xml,"html.parser")
-# result = xmldict.xml_to_dict(xml)
-# print(type(result))
-# print(xmldict.xml_to_dict(xml))
-# result=json.dumps(result, indent=4)
-# print(type(result))
-# print(result)
